@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Football Hub{% endblock %}</title>
+    <style>
+        /* Modern Dark Theme CSS */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: #0f172a; 
+            color: #f1f5f9; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            line-height: 1.6;
+        }
+        
+        /* Navbar */
+        nav {
+            background-color: #1e293b;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #38bdf8;
+        }
+        nav a { color: white; text-decoration: none; font-weight: bold; }
+        .nav-links a { margin-left: 20px; font-weight: normal; color: #94a3b8; }
+        .nav-links a:hover { color: #38bdf8; }
+
+        .container { width: 90%; max-width: 1200px; margin: 30px auto; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid #334155;
+            color: #64748b;
+            margin-top: 50px;
+        }
+
+        /* Reusable Classes */
+        .badge {
+            background: #38bdf8;
+            color: #0f172a;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/" style="font-size: 1.5rem;">⚽ FOOTBALL MANAGER</a>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/admin/">Admin Panel</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Football Management Project | Offline Mode</p>
+    </footer>
+
+</body>
+</html>

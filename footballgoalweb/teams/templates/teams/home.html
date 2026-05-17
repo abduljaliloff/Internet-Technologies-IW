@@ -1,0 +1,190 @@
+{% extends 'teams/base.html' %}
+
+{% block content %}
+<style>
+    :root {
+        --primary: #38bdf8;
+        --secondary: #94a3b8;
+        --bg-dark: #0f172a;
+        --card-bg: #1e293b;
+        --success: #22c55e;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+    }
+
+    .dashboard-header {
+        margin-bottom: 40px;
+        padding: 40px 30px;
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.05);
+        text-align: center;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 10px;
+        margin-top: 25px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .search-box input {
+        flex: 1;
+        padding: 14px 20px;
+        border-radius: 12px;
+        border: 1px solid #334155;
+        background: #0f172a;
+        color: white;
+        outline: none;
+        transition: 0.3s;
+    }
+    .search-box input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    }
+    .search-box button {
+        padding: 12px 30px;
+        background: var(--primary);
+        color: #0f172a;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    /* CRUD Buttons */
+    .btn-add {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--success);
+        color: #0f172a;
+        padding: 12px 24px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        margin-bottom: 20px;
+        transition: 0.3s;
+    }
+    .btn-add:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3); }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+
+    .m-card {
+        background: var(--card-bg);
+        border-radius: 20px;
+        padding: 25px;
+        border: 1px solid rgba(255,255,255,0.05);
+        transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+    }
+    .m-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--primary);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    }
+
+    .badge-pos {
+        display: inline-block;
+        font-size: 0.7rem;
+        background: rgba(56, 189, 248, 0.1);
+        color: var(--primary);
+        padding: 4px 12px;
+        border-radius: 8px;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .section-title {
+        font-size: 1.6rem;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+    }
+    .section-title div { display: flex; align-items: center; gap: 12px; }
+    .section-title span { width: 6px; height: 28px; background: var(--primary); border-radius: 10px; }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+</style>
+
+<div class="dashboard-header">
+    <h1 style="font-size: 2.8rem; font-weight: 800; letter-spacing: -1px;">Football <span style="color: var(--primary);">Intelligence</span></h1>
+    <p style="color: var(--secondary); font-size: 1.1rem;">Full CRUD Management System</p>
+    
+    <form method="GET" action="/" class="search-box">
+        <input type="text" name="q" placeholder="Search for players or teams..." value="{{ request.GET.q|default:'' }}">
+        <button type="submit">SEARCH</button>
+    </form>
+</div>
+
+<div class="section-title">
+    <div><span></span> Football Clubs</div>
+</div>
+<div class="content-grid">
+    {% for team in teams %}
+    <a href="{% url 'team_detail' team.id %}" class="m-card">
+        <div>
+            <h3 style="font-size: 1.4rem; color: white; margin-bottom: 8px;">{{ team.name }}</h3>
+            <p style="color: var(--secondary); font-size: 0.9rem;">📍 {{ team.stadium }}, {{ team.country }}</p>
+        </div>
+        <div class="info-row">
+            <span style="color: var(--secondary); font-size: 0.85rem;">Total Squad</span>
+            <span style="font-weight: bold; color: var(--primary);">{{ team.players.count }} Players</span>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+<div class="section-title">
+    <div><span></span> Player Registry</div>
+    <a href="{% url 'player_create' %}" class="btn-add">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+        ADD PLAYER
+    </a>
+</div>
+
+<div class="content-grid">
+    {% for player in players %}
+    <a href="{% url 'player_detail' player.id %}" class="m-card">
+        <div>
+            <span class="badge-pos">{{ player.get_position_display }}</span>
+            <h3 style="font-size: 1.4rem; color: white; margin-bottom: 5px;">{{ player.full_name }}</h3>
+            <p style="color: var(--secondary); font-size: 0.9rem;">{{ player.team.name }} | #{{ player.jersey_number }}</p>
+        </div>
+        
+        <div class="info-row">
+            <span style="font-weight: 700; color: var(--success); font-size: 1.1rem;">€{{ player.market_value }}M</span>
+            <div style="display: flex; gap: 10px;">
+                 <span style="color: var(--secondary); font-size: 0.8rem;">Edit Profile →</span>
+            </div>
+        </div>
+    </a>
+    {% empty %}
+    <div style="grid-column: 1/-1; text-align: center; padding: 50px; color: var(--secondary);">
+        No records found matching your search.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

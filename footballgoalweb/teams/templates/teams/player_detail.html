@@ -1,0 +1,94 @@
+{% extends 'teams/base.html' %}
+
+{% block content %}
+<style>
+    :root {
+        --primary: #38bdf8;
+        --secondary: #94a3b8;
+        --bg-dark: #0f172a;
+        --card-bg: #1e293b;
+        --success: #22c55e;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+    }
+
+    .m-card {
+        background: var(--card-bg);
+        border-radius: 20px;
+        padding: 40px;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-left: 6px solid var(--primary); /* Sənin istədiyin mavi xətt */
+    }
+
+    /* Statistika qutuları */
+    .stats-grid {
+        display: grid; 
+        grid-template-columns: repeat(4, 1fr); 
+        gap: 15px; 
+        text-align: center; 
+        background: #0f172a; 
+        padding: 25px; 
+        border-radius: 18px;
+        margin: 25px 0;
+    }
+    .stat-val { font-size: 1.8rem; display: block; font-weight: bold; }
+    .stat-lbl { color: var(--secondary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* CRUD Düymələri */
+    .action-bar {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #334155;
+    }
+    .btn-crud {
+        flex: 1;
+        padding: 12px;
+        border-radius: 10px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    .btn-edit { background: var(--warning); color: #0f172a; }
+    .btn-delete { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+    .btn-crud:hover { transform: translateY(-2px); opacity: 0.9; }
+</style>
+
+<div class="detail-container" style="max-width: 800px; margin: 0 auto;">
+    <a href="/" style="display: inline-block; margin-bottom: 20px; color: var(--secondary); text-decoration: none;">← Back to Dashboard</a>
+
+    <div class="m-card">
+        <span style="background: rgba(56, 189, 248, 0.1); color: var(--primary); padding: 6px 14px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; text-transform: uppercase;">
+            {{ player.get_position_display }}
+        </span>
+        
+        <h1 style="font-size: 3.5rem; margin: 15px 0; font-weight: 800;">{{ player.full_name }}</h1>
+        
+        <div style="display: flex; gap: 40px; margin-bottom: 35px; flex-wrap: wrap;">
+            <div><small style="color: var(--secondary);">Current Club</small><br><b style="font-size: 1.2rem;">{{ player.team.name }}</b></div>
+            <div><small style="color: var(--secondary);">Age</small><br><b style="font-size: 1.2rem;">{{ player.age }}</b></div>
+            <div><small style="color: var(--secondary);">Jersey</small><br><b style="font-size: 1.2rem;">#{{ player.jersey_number }}</b></div>
+            <div><small style="color: var(--secondary);">Market Value</small><br><b style="font-size: 1.2rem; color: var(--success);">€{{ player.market_value }}M</b></div>
+        </div>
+
+        <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: white;">Season Statistics</h3>
+        <div class="stats-grid">
+            <div><span class="stat-val" style="color: #fff;">{{ player.stats.goals|default:0 }}</span><small class="stat-lbl">Goals</small></div>
+            <div><span class="stat-val" style="color: #fff;">{{ player.stats.assists|default:0 }}</span><small class="stat-lbl">Assists</small></div>
+            <div><span class="stat-val" style="color: var(--warning);">{{ player.stats.yellow_cards|default:0 }}</span><small class="stat-lbl">Yellows</small></div>
+            <div><span class="stat-val" style="color: var(--danger);">{{ player.stats.red_cards|default:0 }}</span><small class="stat-lbl">Reds</small></div>
+        </div>
+
+        <div class="action-bar">
+            <a href="{% url 'player_update' player.id %}" class="btn-crud btn-edit">
+                EDIT PLAYER
+            </a>
+            <a href="{% url 'player_delete' player.id %}" class="btn-crud btn-delete">
+                DELETE PLAYER
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

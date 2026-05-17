@@ -1,0 +1,113 @@
+{% extends 'teams/base.html' %}
+
+{% block content %}
+<style>
+    select.modern-input, 
+    input.modern-input {
+        width: 100%;
+        padding: 12px;
+        background: #0f172a !important; 
+        border: 1px solid #334155;
+        border-radius: 10px;
+        color: white !important;
+        outline: none;
+        appearance: none; 
+}
+    select option {
+        background: #1e293b;
+        color: white;
+    }
+    .form-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #1e293b;
+        padding: 30px;
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .form-container h2 {
+        margin-bottom: 25px;
+        color: #38bdf8;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #94a3b8;
+        font-size: 0.9rem;
+    }
+
+    input[type="text"], 
+    input[type="number"], 
+    select {
+        width: 100%;
+        padding: 12px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        color: white;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #38bdf8;
+    }
+
+    .btn-save {
+        width: 100%;
+        padding: 14px;
+        background: #22c55e;
+        color: #0f172a;
+        border: none;
+        border-radius: 10px;
+        font-weight: 800;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+
+    .btn-save:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+
+    .back-btn {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="form-container">
+    <h2>{% if form.instance.id %}Edit Player{% else %}Add New Player{% endif %}</h2>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <small style="color: #ef4444;">{{ field.errors }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn-save">
+            {% if form.instance.id %}SAVE CHANGES{% else %}CREATE PLAYER{% endif %}
+        </button>
+    </form>
+    
+    <a href="{% url 'home' %}" class="back-btn">Cancel and Go Back</a>
+</div>
+{% endblock %}
